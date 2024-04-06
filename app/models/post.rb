@@ -1948,7 +1948,8 @@ class Post < ApplicationRecord
   end
 
   def self.normalize_source(source)
-    source.to_s.strip.unicode_normalize(:nfc)
+    # alternative: make sure the url is percent-encoded before this runs
+    source.to_s.strip.tap { |s| unicode_normalize(:nfc) unless web_source? }
   end
 
   def mark_as_translated(params)
